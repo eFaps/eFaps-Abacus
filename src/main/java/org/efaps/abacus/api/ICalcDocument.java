@@ -14,13 +14,20 @@
  * limitations under the License.
  *
  */
-package org.efaps.abacus;
+package org.efaps.abacus.api;
 
-import org.efaps.abacus.pojo.Document;
+import java.math.BigDecimal;
+import java.util.Collection;
 
-public class Calculator
+public interface ICalcDocument
 {
-    public void calc(final Document document) {
 
-    }
+    Collection<ICalcPosition> getPositions();
+
+    BigDecimal getNetTotal();
+    void setNetTotal(BigDecimal netTotal);
+
+    BigDecimal getCrossTotal();
+
+
 }
