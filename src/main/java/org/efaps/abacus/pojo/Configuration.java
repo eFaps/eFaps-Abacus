@@ -19,22 +19,25 @@ package org.efaps.abacus.pojo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.efaps.abacus.api.IConfig;
+import org.efaps.abacus.api.TaxCalcFlow;
 
 public class Configuration
     implements IConfig
 {
-
     private int netPriceScale;
 
-    private int positionTaxScale;
+    private int taxScale;
+
+    private final TaxCalcFlow taxCalcFlow;
 
     private int crossPriceScale;
 
     public Configuration()
     {
         this.netPriceScale = 4;
-        this.positionTaxScale = 2;
-        this.netPriceScale = 4;
+        this.taxScale = 2;
+        this.taxCalcFlow = TaxCalcFlow.ROUND_SUM;
+        this.crossPriceScale = 4;
     }
 
     @Override
@@ -49,14 +52,14 @@ public class Configuration
     }
 
     @Override
-    public int getPositionTaxScale()
+    public int getTaxScale()
     {
-        return positionTaxScale;
+        return taxScale;
     }
 
     public void setPositionTaxScale(int positionTaxScale)
     {
-        this.positionTaxScale = positionTaxScale;
+        this.taxScale = positionTaxScale;
     }
 
     @Override
@@ -74,5 +77,11 @@ public class Configuration
     public String toString()
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+    }
+
+    @Override
+    public TaxCalcFlow getTaxCalcFLow()
+    {
+        return taxCalcFlow;
     }
 }

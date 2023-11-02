@@ -22,11 +22,13 @@ import java.math.RoundingMode;
 import org.efaps.abacus.api.ICalcDocument;
 import org.efaps.abacus.api.ICalcPosition;
 import org.efaps.abacus.api.IConfig;
+import org.efaps.abacus.api.TaxCalcFlow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Calculator
 {
+
     private static final Logger LOG = LoggerFactory.getLogger(Calculator.class);
 
     private final IConfig config;
@@ -44,7 +46,10 @@ public class Calculator
                         .toList();
         LOG.debug("Calculating document: {} ", document);
         for (final var position : positions) {
+            LOG.debug("  Evaluating Position: {} ", position.getIndex());
             evalNetPrice(position);
+            evalTaxes(position);
+            evalCrossPrice(position);
         }
         evalNetTotal(document);
         LOG.debug("result document: {} ", document);
@@ -52,7 +57,6 @@ public class Calculator
 
     protected void evalNetPrice(final ICalcPosition position)
     {
-        LOG.debug("  Evaluating NetPrice for Position: {} ", position.getIndex());
         position.setNetPrice(calcNetPrice(position.getQuantity(), position.getNetUnitPrice()));
         LOG.debug("    = {}", position.getNetPrice());
     }
@@ -60,8 +64,8 @@ public class Calculator
     protected BigDecimal calcNetPrice(final BigDecimal quantity,
                                       final BigDecimal netUnitPrice)
     {
-       LOG.debug("    {} * {}" , quantity, netUnitPrice);
-       return roundNetPrice(quantity.multiply(netUnitPrice));
+        LOG.debug("    NetPrice => {} * {}", quantity, netUnitPrice);
+        return roundNetPrice(quantity.multiply(netUnitPrice));
     }
 
     protected BigDecimal roundNetPrice(final BigDecimal netPrice)
@@ -70,11 +74,64 @@ public class Calculator
         return netPrice.setScale(config.getNetPriceScale(), RoundingMode.HALF_UP);
     }
 
-    protected void evalNetTotal(final ICalcDocument document) {
+    protected void evalNetTotal(final ICalcDocument document)
+    {
         BigDecimal total = BigDecimal.ZERO;
         for (final var position : document.getPositions()) {
             total = total.add(position.getNetPrice());
         }
         document.setNetTotal(total);
+    }
+
+    protected void evalTaxes(final ICalcPosition position)
+    {
+        BigDecimal amount = BigDecimal.ZERO;
+        for (final var tax : position.getTaxes()) {
+            switch (tax.getType()) {
+                case ADVALOREM:
+                    var advalorem = position.getNetPrice().multiply(tax.getPercentage()
+                                    .divide(new BigDecimal(100).setScale(8, RoundingMode.HALF_UP)));
+                    LOG.debug("    Tax ADVALOREM {}", tax.getPercentage());
+                    if (config.getTaxCalcFLow().equals(TaxCalcFlow.ROUND_SUM)) {
+                        advalorem = roundTax(advalorem);
+                    }
+                    tax.setBase(position.getNetPrice());
+                    tax.setAmount(advalorem);
+                    amount = amount.add(advalorem);
+                    LOG.debug("    = {}", advalorem);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + position.getTaxes());
+            }
+        }
+        if (config.getTaxCalcFLow().equals(TaxCalcFlow.SUM_ROUND)) {
+            amount = roundTax(amount);
+        }
+        position.setTaxAmount(amount);
+    }
+
+    protected BigDecimal roundTax(final BigDecimal taxAmount)
+    {
+        LOG.debug("    set scale to {}", config.getTaxScale());
+        return taxAmount.setScale(config.getTaxScale(), RoundingMode.HALF_UP);
+    }
+
+    protected void evalCrossPrice(final ICalcPosition position)
+    {
+        position.setCrossPrice(calcCrossPrice(position.getNetPrice(), position.getTaxAmount()));
+        LOG.debug("    = {}", position.getCrossPrice());
+    }
+
+    protected BigDecimal calcCrossPrice(final BigDecimal netPrice,
+                                        final BigDecimal taxAmount)
+    {
+        LOG.debug("    CrossPrice => {} + {}", netPrice, taxAmount);
+        return roundCrossPrice(netPrice.add(taxAmount));
+    }
+
+    protected BigDecimal roundCrossPrice(final BigDecimal crossPrice)
+    {
+        LOG.debug("    set scale to {}", config.getCrossPriceScale());
+        return crossPrice.setScale(config.getCrossPriceScale(), RoundingMode.HALF_UP);
     }
 }

@@ -17,30 +17,15 @@
 package org.efaps.abacus.api;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
-public interface ICalcPosition
+public interface ITax
 {
 
-    int getIndex();
+    TaxType getType();
 
-    String getProductOid();
+    BigDecimal getPercentage();
 
-    BigDecimal getQuantity();
+    void setBase(BigDecimal base);
 
-    BigDecimal getNetUnitPrice();
-
-    BigDecimal getNetPrice();
-
-    void setNetPrice(BigDecimal netPrice);
-
-    Collection<ITax> getTaxes();
-
-    BigDecimal getTaxAmount();
-
-    void setTaxAmount(BigDecimal taxAmount);
-
-    BigDecimal getCrossPrice();
-
-    void setCrossPrice(BigDecimal crossPrice);
+    void setAmount(BigDecimal amount);
 }

@@ -21,7 +21,9 @@ public interface IConfig
 
     int getNetPriceScale();
 
-    int getPositionTaxScale();
+    int getTaxScale();
 
     int getCrossPriceScale();
+
+    TaxCalcFlow getTaxCalcFLow();
 }

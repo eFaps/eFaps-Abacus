@@ -17,10 +17,12 @@
 package org.efaps.abacus.pojo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.efaps.abacus.api.ICalcPosition;
+import org.efaps.abacus.api.ITax;
 
 public class CalcPosition
     implements ICalcPosition
@@ -31,6 +33,20 @@ public class CalcPosition
     private BigDecimal quantity;
     private BigDecimal netUnitPrice;
     private BigDecimal netPrice;
+    private List<ITax> taxes;
+    private BigDecimal taxAmount;
+    private BigDecimal crossPrice;
+
+    public BigDecimal getCrossPrice()
+    {
+        return crossPrice;
+    }
+
+    @Override
+    public void setCrossPrice(BigDecimal crossPrice)
+    {
+        this.crossPrice = crossPrice;
+    }
 
     @Override
     public int getIndex()
@@ -90,6 +106,29 @@ public class CalcPosition
     public void setNetPrice(BigDecimal netPrice)
     {
         this.netPrice = netPrice;
+    }
+
+    @Override
+    public List<ITax> getTaxes()
+    {
+        return taxes;
+    }
+
+    public CalcPosition setTaxes(List<ITax> taxes)
+    {
+        this.taxes = taxes;
+        return this;
+    }
+
+    public BigDecimal getTaxAmount()
+    {
+        return taxAmount;
+    }
+
+    @Override
+    public void setTaxAmount(BigDecimal taxAmount)
+    {
+        this.taxAmount = taxAmount;
     }
 
     @Override
