@@ -60,9 +60,10 @@ public class Tax
         return key;
     }
 
-    public void setKey(String key)
+    public Tax setKey(String key)
     {
         this.key = key;
+        return this;
     }
 
     @Override
@@ -93,6 +94,12 @@ public class Tax
     public String toString()
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+    }
+
+    public static Tax getAdvalorem(final String key,
+                                   final BigDecimal percentage)
+    {
+        return new Tax().setType(TaxType.ADVALOREM).setKey(key).setPercentage(percentage);
     }
 
 }
