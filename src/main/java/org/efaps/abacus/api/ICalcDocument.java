@@ -28,6 +28,6 @@ public interface ICalcDocument
     void setNetTotal(BigDecimal netTotal);
 
     BigDecimal getCrossTotal();
-
+    void setCrossTotal(BigDecimal crossTotal);
 
 }

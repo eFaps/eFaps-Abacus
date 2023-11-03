@@ -52,6 +52,7 @@ public class Calculator
             evalCrossPrice(position);
         }
         evalNetTotal(document);
+        evalCrossTotal(document);
         LOG.debug("result document: {} ", document);
     }
 
@@ -92,7 +93,7 @@ public class Calculator
                     var advalorem = position.getNetPrice().multiply(tax.getPercentage()
                                     .divide(new BigDecimal(100).setScale(8, RoundingMode.HALF_UP)));
                     LOG.debug("    Tax ADVALOREM {}", tax.getPercentage());
-                    if (config.getTaxCalcFLow().equals(TaxCalcFlow.ROUND_SUM)) {
+                    if (config.getTaxCalcFlow().equals(TaxCalcFlow.ROUND_SUM)) {
                         advalorem = roundTax(advalorem);
                     }
                     tax.setBase(position.getNetPrice());
@@ -104,10 +105,25 @@ public class Calculator
                     throw new IllegalArgumentException("Unexpected value: " + position.getTaxes());
             }
         }
-        if (config.getTaxCalcFLow().equals(TaxCalcFlow.SUM_ROUND)) {
+        if (config.getTaxCalcFlow().equals(TaxCalcFlow.SUM_ROUND)) {
             amount = roundTax(amount);
         }
         position.setTaxAmount(amount);
+    }
+
+    protected void evalCrossTotal(final ICalcDocument document)
+    {
+        switch (config.getCrossTotalFlow()) {
+            case SumCrossPrice:
+                BigDecimal total = BigDecimal.ZERO;
+                for (final var position : document.getPositions()) {
+                    total = total.add(position.getCrossPrice());
+                }
+                document.setCrossTotal(total);
+                break;
+            case NetTotalPlusTax:
+                break;
+        }
     }
 
     protected BigDecimal roundTax(final BigDecimal taxAmount)

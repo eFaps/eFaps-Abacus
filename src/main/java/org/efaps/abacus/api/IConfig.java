@@ -25,5 +25,7 @@ public interface IConfig
 
     int getCrossPriceScale();
 
-    TaxCalcFlow getTaxCalcFLow();
+    TaxCalcFlow getTaxCalcFlow();
+
+    CrossTotalFlow getCrossTotalFlow();
 }

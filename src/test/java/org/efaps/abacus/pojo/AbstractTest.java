@@ -14,11 +14,18 @@
  * limitations under the License.
  *
  */
-package org.efaps.abacus.api;
+package org.efaps.abacus.pojo;
 
+import java.math.BigDecimal;
 
-public enum TaxCalcFlow
+import org.testng.Assert;
+
+public abstract class AbstractTest
 {
-    ROUND_SUM,
-    SUM_ROUND
+
+    public static void assertNumericEquals(final BigDecimal actual,
+                                           final BigDecimal expected)
+    {
+        Assert.assertEquals(actual.stripTrailingZeros(), expected.stripTrailingZeros());
+    }
 }

@@ -23,11 +23,10 @@ import java.util.List;
 
 import org.efaps.abacus.Calculator;
 import org.efaps.abacus.api.ICalcPosition;
-import org.efaps.abacus.api.TaxType;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class CalculatorTest
+    extends AbstractTest
 {
 
     @Test
@@ -38,30 +37,29 @@ public class CalculatorTest
                         .setIndex(0)
                         .setQuantity(BigDecimal.ONE)
                         .setNetUnitPrice(new BigDecimal("12.44"))
-                        .setTaxes(Collections.singletonList(new Tax()
-                                        .setType(TaxType.ADVALOREM)
-                                        .setPercentage(new BigDecimal(19)))));
+                        .setTaxes(Collections.singletonList(Tax.getAdvalorem("IGV", new BigDecimal(18)))));
         positions.add(new CalcPosition()
                         .setIndex(1)
                         .setQuantity(BigDecimal.ONE)
                         .setNetUnitPrice(new BigDecimal("9.14"))
-                        .setTaxes(Collections.singletonList(new Tax()
-                                        .setType(TaxType.ADVALOREM)
-                                        .setPercentage(new BigDecimal(19)))));
+                        .setTaxes(Collections.singletonList(Tax.getAdvalorem("IGV", new BigDecimal(18)))));
 
         final var doc = new CalcDocument().setPositions(positions);
 
         final var calculator = new Calculator(new Configuration());
 
         calculator.calc(doc);
-        Assert.assertTrue(new BigDecimal("12.44").compareTo(doc.getPositions().get(0).getNetPrice()) == 0);
-        Assert.assertTrue(new BigDecimal("9.14").compareTo(doc.getPositions().get(1).getNetPrice()) == 0);
+        assertNumericEquals(doc.getPositions().get(0).getNetPrice(), new BigDecimal("12.44"));
+        assertNumericEquals(doc.getPositions().get(1).getNetPrice(), new BigDecimal("9.14"));
 
         final var taxes = (List) doc.getPositions().get(0).getTaxes();
-        Assert.assertTrue(new BigDecimal("2.36").compareTo(((Tax) taxes.get(0)).getAmount()) == 0);
-        Assert.assertTrue(doc.getPositions().get(0).getNetPrice().compareTo(((Tax) taxes.get(0)).getBase()) == 0);
+        assertNumericEquals(((Tax) taxes.get(0)).getAmount(), new BigDecimal("2.24"));
+        assertNumericEquals(doc.getPositions().get(0).getNetPrice(), ((Tax) taxes.get(0)).getBase());
 
-        Assert.assertTrue(new BigDecimal("14.8").compareTo(doc.getPositions().get(0).getCrossPrice()) == 0);
-        Assert.assertTrue(new BigDecimal("10.88").compareTo(doc.getPositions().get(1).getCrossPrice()) == 0);
+        assertNumericEquals(doc.getPositions().get(0).getCrossPrice(), new BigDecimal("14.68"));
+        assertNumericEquals(doc.getPositions().get(1).getCrossPrice(), new BigDecimal("10.79"));
+
+        assertNumericEquals(doc.getNetTotal(), new BigDecimal("21.58"));
+        assertNumericEquals(doc.getCrossTotal(), new BigDecimal("25.47"));
     }
 }

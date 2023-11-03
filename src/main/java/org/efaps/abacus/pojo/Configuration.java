@@ -18,6 +18,7 @@ package org.efaps.abacus.pojo;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.efaps.abacus.api.CrossTotalFlow;
 import org.efaps.abacus.api.IConfig;
 import org.efaps.abacus.api.TaxCalcFlow;
 
@@ -28,9 +29,12 @@ public class Configuration
 
     private int taxScale;
 
-    private final TaxCalcFlow taxCalcFlow;
+    private TaxCalcFlow taxCalcFlow;
 
     private int crossPriceScale;
+
+    private CrossTotalFlow crossTotalFlow;
+
 
     public Configuration()
     {
@@ -38,6 +42,7 @@ public class Configuration
         this.taxScale = 2;
         this.taxCalcFlow = TaxCalcFlow.ROUND_SUM;
         this.crossPriceScale = 4;
+        this.crossTotalFlow = CrossTotalFlow.SumCrossPrice;
     }
 
     @Override
@@ -74,14 +79,39 @@ public class Configuration
     }
 
     @Override
+    public TaxCalcFlow getTaxCalcFlow()
+    {
+        return taxCalcFlow;
+    }
+
+
+    public void setTaxCalcFlow(TaxCalcFlow taxCalcFlow)
+    {
+        this.taxCalcFlow = taxCalcFlow;
+    }
+
+
+    public CrossTotalFlow getCrossTotalFlow()
+    {
+        return crossTotalFlow;
+    }
+
+
+    public void setCrossTotalFlow(CrossTotalFlow crossTotalFlow)
+    {
+        this.crossTotalFlow = crossTotalFlow;
+    }
+
+
+    public void setTaxScale(int taxScale)
+    {
+        this.taxScale = taxScale;
+    }
+
+
+    @Override
     public String toString()
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
-    }
-
-    @Override
-    public TaxCalcFlow getTaxCalcFLow()
-    {
-        return taxCalcFlow;
     }
 }

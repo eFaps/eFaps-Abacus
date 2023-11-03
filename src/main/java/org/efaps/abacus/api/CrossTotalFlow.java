@@ -17,8 +17,14 @@
 package org.efaps.abacus.api;
 
 
-public enum TaxCalcFlow
+public enum CrossTotalFlow
 {
-    ROUND_SUM,
-    SUM_ROUND
+    /**
+     * Calculate the CrossTotal by using the NetTotal and add the Total Taxes
+     */
+    NetTotalPlusTax,
+    /**
+     * Calculate the CrossTotal by using summarizing the Position CrossPrices
+     */
+    SumCrossPrice
 }
