@@ -25,6 +25,7 @@ import org.efaps.abacus.api.TaxCalcFlow;
 public class Configuration
     implements IConfig
 {
+
     private int netPriceScale;
 
     private int taxScale;
@@ -34,7 +35,6 @@ public class Configuration
     private int crossPriceScale;
 
     private CrossTotalFlow crossTotalFlow;
-
 
     public Configuration()
     {
@@ -51,9 +51,10 @@ public class Configuration
         return netPriceScale;
     }
 
-    public void setNetPriceScale(int netPriceScale)
+    public Configuration setNetPriceScale(int netPriceScale)
     {
         this.netPriceScale = netPriceScale;
+        return this;
     }
 
     @Override
@@ -62,20 +63,16 @@ public class Configuration
         return taxScale;
     }
 
-    public void setPositionTaxScale(int positionTaxScale)
-    {
-        this.taxScale = positionTaxScale;
-    }
-
     @Override
     public int getCrossPriceScale()
     {
         return crossPriceScale;
     }
 
-    public void setCrossPriceScale(int crossPriceScale)
+    public Configuration setCrossPriceScale(int crossPriceScale)
     {
         this.crossPriceScale = crossPriceScale;
+        return this;
     }
 
     @Override
@@ -84,30 +81,28 @@ public class Configuration
         return taxCalcFlow;
     }
 
-
     public void setTaxCalcFlow(TaxCalcFlow taxCalcFlow)
     {
         this.taxCalcFlow = taxCalcFlow;
     }
 
-
+    @Override
     public CrossTotalFlow getCrossTotalFlow()
     {
         return crossTotalFlow;
     }
 
-
-    public void setCrossTotalFlow(CrossTotalFlow crossTotalFlow)
+    public Configuration setCrossTotalFlow(CrossTotalFlow crossTotalFlow)
     {
         this.crossTotalFlow = crossTotalFlow;
+        return this;
     }
 
-
-    public void setTaxScale(int taxScale)
+    public Configuration setTaxScale(int taxScale)
     {
         this.taxScale = taxScale;
+        return this;
     }
-
 
     @Override
     public String toString()

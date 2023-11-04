@@ -18,6 +18,7 @@ package org.efaps.abacus.api;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 public interface ICalcDocument
 {
@@ -25,9 +26,17 @@ public interface ICalcDocument
     Collection<ICalcPosition> getPositions();
 
     BigDecimal getNetTotal();
+
     void setNetTotal(BigDecimal netTotal);
 
+    BigDecimal getTaxTotal();
+
+    void setTaxTotal(BigDecimal taxTotal);
+
+    void setTaxes(List<ITax> taxes);
+
     BigDecimal getCrossTotal();
+
     void setCrossTotal(BigDecimal crossTotal);
 
 }

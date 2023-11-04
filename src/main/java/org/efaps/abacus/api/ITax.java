@@ -21,11 +21,17 @@ import java.math.BigDecimal;
 public interface ITax
 {
 
+    String getKey();
+
     TaxType getType();
 
     BigDecimal getPercentage();
 
-    void setBase(BigDecimal base);
+    BigDecimal getBase();
 
-    void setAmount(BigDecimal amount);
+    ITax setBase(BigDecimal base);
+
+    BigDecimal getAmount();
+
+    ITax setAmount(BigDecimal amount);
 }

@@ -24,12 +24,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.efaps.abacus.api.ICalcDocument;
 import org.efaps.abacus.api.ICalcPosition;
+import org.efaps.abacus.api.ITax;
 
 public class CalcDocument
     implements ICalcDocument
 {
 
     private BigDecimal netTotal;
+    private List<ITax> taxes;
+
+    private BigDecimal taxTotal;
     private BigDecimal crossTotal;
 
     private List<ICalcPosition> positions;
@@ -73,9 +77,33 @@ public class CalcDocument
         return crossTotal;
     }
 
+    @Override
     public void setCrossTotal(final BigDecimal crossTotal)
     {
         this.crossTotal = crossTotal;
+    }
+
+    @Override
+    public BigDecimal getTaxTotal()
+    {
+        return taxTotal;
+    }
+
+    @Override
+    public void setTaxTotal(BigDecimal taxTotal)
+    {
+        this.taxTotal = taxTotal;
+    }
+
+    public List<ITax> getTaxes()
+    {
+        return taxes;
+    }
+
+    @Override
+    public void setTaxes(List<ITax> taxes)
+    {
+        this.taxes = taxes;
     }
 
     @Override

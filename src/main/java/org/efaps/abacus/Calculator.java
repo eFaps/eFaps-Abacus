@@ -18,11 +18,15 @@ package org.efaps.abacus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.TreeMap;
 
 import org.efaps.abacus.api.ICalcDocument;
 import org.efaps.abacus.api.ICalcPosition;
 import org.efaps.abacus.api.IConfig;
+import org.efaps.abacus.api.ITax;
 import org.efaps.abacus.api.TaxCalcFlow;
+import org.efaps.abacus.pojo.Tax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +56,8 @@ public class Calculator
             evalCrossPrice(position);
         }
         evalNetTotal(document);
+        evalTaxes(document);
+        evalTaxTotal(document);
         evalCrossTotal(document);
         LOG.debug("result document: {} ", document);
     }
@@ -77,11 +83,16 @@ public class Calculator
 
     protected void evalNetTotal(final ICalcDocument document)
     {
+        document.setNetTotal(getNetTotal(document).setScale(2, RoundingMode.HALF_UP));
+    }
+
+    protected BigDecimal getNetTotal(final ICalcDocument document)
+    {
         BigDecimal total = BigDecimal.ZERO;
         for (final var position : document.getPositions()) {
             total = total.add(position.getNetPrice());
         }
-        document.setNetTotal(total);
+        return total;
     }
 
     protected void evalTaxes(final ICalcPosition position)
@@ -113,17 +124,23 @@ public class Calculator
 
     protected void evalCrossTotal(final ICalcDocument document)
     {
+        document.setCrossTotal(getCrossTotal(document).setScale(2, RoundingMode.HALF_UP));
+    }
+
+    protected BigDecimal getCrossTotal(final ICalcDocument document)
+    {
+        BigDecimal total = BigDecimal.ZERO;
         switch (config.getCrossTotalFlow()) {
             case SumCrossPrice:
-                BigDecimal total = BigDecimal.ZERO;
                 for (final var position : document.getPositions()) {
                     total = total.add(position.getCrossPrice());
                 }
-                document.setCrossTotal(total);
                 break;
             case NetTotalPlusTax:
+                total = document.getNetTotal().add(document.getTaxTotal());
                 break;
         }
+        return total;
     }
 
     protected BigDecimal roundTax(final BigDecimal taxAmount)
@@ -149,5 +166,48 @@ public class Calculator
     {
         LOG.debug("    set scale to {}", config.getCrossPriceScale());
         return crossPrice.setScale(config.getCrossPriceScale(), RoundingMode.HALF_UP);
+    }
+
+    protected void evalTaxes(final ICalcDocument document)
+    {
+        document.setTaxes(getTaxes(document).stream().map(tax -> {
+            tax.setAmount(tax.getAmount().setScale(2, RoundingMode.HALF_UP));
+            tax.setBase(tax.getBase().setScale(2, RoundingMode.HALF_UP));
+            return tax;
+        }).toList());
+    }
+
+    protected void evalTaxTotal(final ICalcDocument document)
+    {
+        document.setTaxTotal(getTaxTotal(document).setScale(2, RoundingMode.HALF_UP));
+    }
+
+    protected BigDecimal getTaxTotal(final ICalcDocument document)
+    {
+        return getTaxes(document).stream().map(ITax::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    protected List<ITax> getTaxes(final ICalcDocument document)
+    {
+        final var taxMap = new TreeMap<String, Tax>();
+        for (final var position : document.getPositions()) {
+            for (final var tax : position.getTaxes()) {
+                Tax totalTax;
+                if (taxMap.containsKey(tax.getKey())) {
+                    totalTax = taxMap.get(tax.getKey());
+                } else {
+                    totalTax = new Tax()
+                                    .setKey(tax.getKey())
+                                    .setType(tax.getType())
+                                    .setPercentage(tax.getPercentage())
+                                    .setAmount(BigDecimal.ZERO)
+                                    .setBase(BigDecimal.ZERO);
+                    taxMap.put(tax.getKey(), totalTax);
+                }
+                totalTax.setAmount(totalTax.getAmount().add(tax.getAmount()));
+                totalTax.setBase(totalTax.getBase().add(tax.getBase()));
+            }
+        }
+        return taxMap.values().stream().map(tax -> (ITax) tax).toList();
     }
 }

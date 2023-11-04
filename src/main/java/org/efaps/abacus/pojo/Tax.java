@@ -39,9 +39,10 @@ public class Tax
     }
 
     @Override
-    public void setBase(BigDecimal base)
+    public Tax setBase(BigDecimal base)
     {
         this.base = base;
+        return this;
     }
 
     public BigDecimal getAmount()
@@ -50,11 +51,13 @@ public class Tax
     }
 
     @Override
-    public void setAmount(BigDecimal amount)
+    public Tax setAmount(BigDecimal amount)
     {
         this.amount = amount;
+        return this;
     }
 
+    @Override
     public String getKey()
     {
         return key;
