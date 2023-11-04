@@ -17,7 +17,7 @@
 package org.efaps.abacus.api;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 public interface ICalcPosition
 {
@@ -34,7 +34,7 @@ public interface ICalcPosition
 
     void setNetPrice(BigDecimal netPrice);
 
-    Collection<ITax> getTaxes();
+    List<ITax> getTaxes();
 
     BigDecimal getTaxAmount();
 
