@@ -112,6 +112,11 @@ public class Calculator
                     amount = amount.add(advalorem);
                     LOG.debug("    = {}", advalorem);
                     break;
+                case PERUNIT:
+                    LOG.debug("    Tax PERUNIT {}", tax.getAmount());
+                    tax.setBase(position.getQuantity());
+                    tax.setAmount(tax.getAmount().multiply(position.getQuantity()));
+                    break;
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + position.getTaxes());
             }
