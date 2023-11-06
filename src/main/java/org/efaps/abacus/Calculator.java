@@ -104,7 +104,7 @@ public class Calculator
                     var advalorem = position.getNetPrice().multiply(tax.getPercentage()
                                     .divide(new BigDecimal(100).setScale(8, RoundingMode.HALF_UP)));
                     LOG.debug("    Tax ADVALOREM {}", tax.getPercentage());
-                    if (config.getTaxCalcFlow().equals(TaxCalcFlow.ROUND_SUM)) {
+                    if (config.getTaxCalcFlow().equals(TaxCalcFlow.RoundSum)) {
                         advalorem = roundTax(advalorem);
                     }
                     tax.setBase(position.getNetPrice());
@@ -121,7 +121,7 @@ public class Calculator
                     throw new IllegalArgumentException("Unexpected value: " + position.getTaxes());
             }
         }
-        if (config.getTaxCalcFlow().equals(TaxCalcFlow.SUM_ROUND)) {
+        if (config.getTaxCalcFlow().equals(TaxCalcFlow.SumRound)) {
             amount = roundTax(amount);
         }
         position.setTaxAmount(amount);

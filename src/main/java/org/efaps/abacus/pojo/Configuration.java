@@ -40,7 +40,7 @@ public class Configuration
     {
         this.netPriceScale = 4;
         this.taxScale = 2;
-        this.taxCalcFlow = TaxCalcFlow.ROUND_SUM;
+        this.taxCalcFlow = TaxCalcFlow.RoundSum;
         this.crossPriceScale = 4;
         this.crossTotalFlow = CrossTotalFlow.SumCrossPrice;
     }
