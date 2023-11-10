@@ -40,6 +40,10 @@ public interface ICalcPosition
 
     void setTaxAmount(BigDecimal taxAmount);
 
+    BigDecimal getCrossUnitPrice();
+
+    void setCrossUnitPrice(BigDecimal crossPrice);
+
     BigDecimal getCrossPrice();
 
     void setCrossPrice(BigDecimal crossPrice);

@@ -35,8 +35,20 @@ public class CalcPosition
     private BigDecimal netPrice;
     private List<ITax> taxes;
     private BigDecimal taxAmount;
+    private BigDecimal crossUnitPrice;
     private BigDecimal crossPrice;
 
+    public BigDecimal getCrossUnitPrice()
+    {
+        return crossUnitPrice;
+    }
+
+    public void setCrossUnitPrice(BigDecimal crossUnitPrice)
+    {
+        this.crossUnitPrice = crossUnitPrice;
+    }
+
+    @Override
     public BigDecimal getCrossPrice()
     {
         return crossPrice;
@@ -120,6 +132,7 @@ public class CalcPosition
         return this;
     }
 
+    @Override
     public BigDecimal getTaxAmount()
     {
         return taxAmount;
