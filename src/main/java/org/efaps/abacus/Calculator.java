@@ -44,22 +44,27 @@ public class Calculator
 
     public void calc(final ICalcDocument document)
     {
-        final var positions = document.getPositions().stream().sorted((pos0,
-                                                                       pos1) -> pos0.getIndex() - pos1.getIndex())
-                        .toList();
-        LOG.debug("Calculating document: {} ", document);
-        for (final var position : positions) {
-            LOG.debug("  Evaluating Position: {} ", position.getIndex());
-            evalNetPrice(position);
-            evalTaxes(position);
-            evalCrossUnitPrice(position);
-            evalCrossPrice(position);
+        if (document.getPositions() == null) {
+            LOG.warn("Document without positions: {} ", document);
+        } else {
+
+            final var positions = document.getPositions().stream().sorted((pos0,
+                                                                           pos1) -> pos0.getIndex() - pos1.getIndex())
+                            .toList();
+            LOG.debug("Calculating document: {} ", document);
+            for (final var position : positions) {
+                LOG.debug("  Evaluating Position: {} ", position.getIndex());
+                evalNetPrice(position);
+                evalTaxes(position);
+                evalCrossUnitPrice(position);
+                evalCrossPrice(position);
+            }
+            evalNetTotal(document);
+            evalTaxes(document);
+            evalTaxTotal(document);
+            evalCrossTotal(document);
+            LOG.debug("result document: {} ", document);
         }
-        evalNetTotal(document);
-        evalTaxes(document);
-        evalTaxTotal(document);
-        evalCrossTotal(document);
-        LOG.debug("result document: {} ", document);
     }
 
     protected void evalNetPrice(final ICalcPosition position)
