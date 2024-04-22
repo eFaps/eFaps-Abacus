@@ -46,4 +46,6 @@ public interface ICalcPosition
     BigDecimal getCrossPrice();
 
     void setCrossPrice(BigDecimal crossPrice);
+
+    ICalcPosition clone();
 }

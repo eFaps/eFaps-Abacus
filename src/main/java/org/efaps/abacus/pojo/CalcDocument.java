@@ -94,6 +94,7 @@ public class CalcDocument
         this.taxTotal = taxTotal;
     }
 
+    @Override
     public List<ITax> getTaxes()
     {
         return taxes;
@@ -103,6 +104,18 @@ public class CalcDocument
     public void setTaxes(List<ITax> taxes)
     {
         this.taxes = taxes;
+    }
+
+    @Override
+    public CalcDocument clone()
+    {
+        final var doc = new CalcDocument();
+        doc.setNetTotal(getNetTotal());
+        doc.setCrossTotal(getCrossTotal());
+        doc.setTaxTotal(getTaxTotal());
+        doc.setTaxes(getTaxes());
+        doc.setPositions(getPositions().stream().map(ICalcPosition::clone).toList());
+        return doc;
     }
 
     @Override

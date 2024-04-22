@@ -33,10 +33,12 @@ public interface ICalcDocument
     void setTaxTotal(BigDecimal taxTotal);
 
     List<ITax> getTaxes();
+
     void setTaxes(List<ITax> taxes);
 
     BigDecimal getCrossTotal();
 
     void setCrossTotal(BigDecimal crossTotal);
 
+    ICalcDocument clone();
 }

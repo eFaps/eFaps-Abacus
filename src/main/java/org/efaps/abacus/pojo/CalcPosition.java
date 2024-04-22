@@ -37,11 +37,13 @@ public class CalcPosition
     private BigDecimal crossUnitPrice;
     private BigDecimal crossPrice;
 
+    @Override
     public BigDecimal getCrossUnitPrice()
     {
         return crossUnitPrice;
     }
 
+    @Override
     public void setCrossUnitPrice(BigDecimal crossUnitPrice)
     {
         this.crossUnitPrice = crossUnitPrice;
@@ -141,6 +143,21 @@ public class CalcPosition
     public void setTaxAmount(BigDecimal taxAmount)
     {
         this.taxAmount = taxAmount;
+    }
+
+    @Override
+    public CalcPosition clone() {
+        final var position = new CalcPosition();
+        position.setCrossPrice(getCrossPrice());
+        position.setCrossUnitPrice(getCrossUnitPrice());
+        position.setIndex(getIndex());
+        position.setNetPrice(getNetPrice());
+        position.setNetUnitPrice(getNetPrice());
+        position.setProductOid(getProductOid());
+        position.setQuantity(getQuantity());
+        position.setTaxAmount(getTaxAmount());
+        position.setTaxes(getTaxes());
+        return position;
     }
 
     @Override
