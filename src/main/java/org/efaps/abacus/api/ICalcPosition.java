@@ -29,23 +29,27 @@ public interface ICalcPosition
 
     BigDecimal getNetUnitPrice();
 
+    ICalcPosition setNetUnitPrice(BigDecimal netUnitPrice);
+
     BigDecimal getNetPrice();
 
-    void setNetPrice(BigDecimal netPrice);
+    ICalcPosition setNetPrice(BigDecimal netPrice);
 
     List<ITax> getTaxes();
 
     BigDecimal getTaxAmount();
 
-    void setTaxAmount(BigDecimal taxAmount);
+    ICalcPosition setTaxAmount(BigDecimal taxAmount);
 
     BigDecimal getCrossUnitPrice();
 
-    void setCrossUnitPrice(BigDecimal crossPrice);
+    ICalcPosition setCrossUnitPrice(BigDecimal crossPrice);
 
     BigDecimal getCrossPrice();
 
-    void setCrossPrice(BigDecimal crossPrice);
+    ICalcPosition setCrossPrice(BigDecimal crossPrice);
 
     ICalcPosition clone();
+
+    ICalcPosition updateWith(ICalcPosition position);
 }

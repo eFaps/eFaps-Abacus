@@ -123,4 +123,20 @@ public class CalcDocument
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
+
+    @Override
+    public ICalcDocument updateWith(ICalcDocument document)
+    {
+        setNetTotal(document.getNetTotal());
+        setCrossTotal(document.getCrossTotal());
+        setTaxTotal(document.getTaxTotal());
+        setTaxes(document.getTaxes());
+
+        final var otherDocPosIter = document.getPositions().iterator();
+        for (final ICalcPosition originalDocPos : getPositions()) {
+            final var promoDocPos = otherDocPosIter.next();
+            originalDocPos.updateWith(promoDocPos);
+        }
+        return this;
+    }
 }

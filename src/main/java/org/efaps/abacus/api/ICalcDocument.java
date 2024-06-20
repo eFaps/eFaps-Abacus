@@ -41,4 +41,6 @@ public interface ICalcDocument
     void setCrossTotal(BigDecimal crossTotal);
 
     ICalcDocument clone();
+
+    ICalcDocument updateWith(ICalcDocument position);
 }

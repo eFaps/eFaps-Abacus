@@ -44,9 +44,10 @@ public class CalcPosition
     }
 
     @Override
-    public void setCrossUnitPrice(BigDecimal crossUnitPrice)
+    public CalcPosition setCrossUnitPrice(BigDecimal crossUnitPrice)
     {
         this.crossUnitPrice = crossUnitPrice;
+        return this;
     }
 
     @Override
@@ -56,9 +57,10 @@ public class CalcPosition
     }
 
     @Override
-    public void setCrossPrice(BigDecimal crossPrice)
+    public CalcPosition setCrossPrice(BigDecimal crossPrice)
     {
         this.crossPrice = crossPrice;
+        return this;
     }
 
     @Override
@@ -91,6 +93,7 @@ public class CalcPosition
         return netUnitPrice;
     }
 
+    @Override
     public CalcPosition setNetUnitPrice(final BigDecimal netUnitPrice)
     {
         this.netUnitPrice = netUnitPrice;
@@ -116,9 +119,10 @@ public class CalcPosition
     }
 
     @Override
-    public void setNetPrice(BigDecimal netPrice)
+    public CalcPosition setNetPrice(BigDecimal netPrice)
     {
         this.netPrice = netPrice;
+        return this;
     }
 
     @Override
@@ -140,24 +144,41 @@ public class CalcPosition
     }
 
     @Override
-    public void setTaxAmount(BigDecimal taxAmount)
+    public CalcPosition setTaxAmount(BigDecimal taxAmount)
     {
         this.taxAmount = taxAmount;
+        return this;
     }
 
     @Override
-    public CalcPosition clone() {
+    public CalcPosition clone()
+    {
         final var position = new CalcPosition();
         position.setCrossPrice(getCrossPrice());
         position.setCrossUnitPrice(getCrossUnitPrice());
         position.setIndex(getIndex());
         position.setNetPrice(getNetPrice());
-        position.setNetUnitPrice(getNetPrice());
+        position.setNetUnitPrice(getNetUnitPrice());
         position.setProductOid(getProductOid());
         position.setQuantity(getQuantity());
         position.setTaxAmount(getTaxAmount());
         position.setTaxes(getTaxes());
         return position;
+    }
+
+    @Override
+    public CalcPosition updateWith(final ICalcPosition position)
+    {
+        setCrossPrice(position.getCrossPrice());
+        setCrossUnitPrice(position.getCrossUnitPrice());
+        setIndex(position.getIndex());
+        setNetPrice(position.getNetPrice());
+        setNetUnitPrice(position.getNetPrice());
+        setProductOid(position.getProductOid());
+        setQuantity(position.getQuantity());
+        setTaxAmount(position.getTaxAmount());
+        setTaxes(position.getTaxes());
+        return this;
     }
 
     @Override
