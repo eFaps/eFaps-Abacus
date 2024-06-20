@@ -42,6 +42,11 @@ public class Calculator
         this.config = config;
     }
 
+    public IConfig getConfig()
+    {
+        return config;
+    }
+
     public void calc(final ICalcDocument document)
     {
         if (document.getPositions() == null) {
