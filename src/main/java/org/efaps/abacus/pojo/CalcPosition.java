@@ -173,7 +173,7 @@ public class CalcPosition
         setCrossUnitPrice(position.getCrossUnitPrice());
         setIndex(position.getIndex());
         setNetPrice(position.getNetPrice());
-        setNetUnitPrice(position.getNetPrice());
+        setNetUnitPrice(position.getNetUnitPrice());
         setProductOid(position.getProductOid());
         setQuantity(position.getQuantity());
         setTaxAmount(position.getTaxAmount());
