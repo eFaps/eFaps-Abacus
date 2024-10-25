@@ -52,4 +52,9 @@ public interface ICalcPosition
     ICalcPosition clone();
 
     ICalcPosition updateWith(ICalcPosition position);
+
+    default boolean isFreeOfCharge()
+    {
+        return getTaxes().stream().anyMatch(ITax::isFreeOfCharge);
+    }
 }

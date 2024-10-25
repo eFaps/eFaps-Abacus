@@ -33,4 +33,9 @@ public interface ITax
     BigDecimal getAmount();
 
     ITax setAmount(BigDecimal amount);
+
+    default boolean isFreeOfCharge()
+    {
+        return false;
+    }
 }

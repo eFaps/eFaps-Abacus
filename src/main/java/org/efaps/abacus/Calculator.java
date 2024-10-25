@@ -100,7 +100,9 @@ public class Calculator
     {
         BigDecimal total = BigDecimal.ZERO;
         for (final var position : document.getPositions()) {
-            total = total.add(position.getNetPrice());
+            if (!position.isFreeOfCharge()) {
+                total = total.add(position.getNetPrice());
+            }
         }
         return total;
     }
@@ -149,7 +151,9 @@ public class Calculator
         switch (config.getCrossTotalFlow()) {
             case SumCrossPrice:
                 for (final var position : document.getPositions()) {
-                    total = total.add(position.getCrossPrice());
+                    if (!position.isFreeOfCharge()) {
+                        total = total.add(position.getCrossPrice());
+                    }
                 }
                 break;
             case NetTotalPlusTax:
@@ -226,7 +230,10 @@ public class Calculator
 
     protected BigDecimal getTaxTotal(final ICalcDocument document)
     {
-        return getTaxes(document).stream().map(ITax::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return getTaxes(document).stream()
+                        .filter(tax -> !tax.isFreeOfCharge())
+                        .map(ITax::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     protected List<ITax> getTaxes(final ICalcDocument document)
@@ -243,7 +250,8 @@ public class Calculator
                                     .setType(tax.getType())
                                     .setPercentage(tax.getPercentage())
                                     .setAmount(BigDecimal.ZERO)
-                                    .setBase(BigDecimal.ZERO);
+                                    .setBase(BigDecimal.ZERO)
+                                    .setFreeOfCharge(tax.isFreeOfCharge());
                     taxMap.put(tax.getKey(), totalTax);
                 }
                 totalTax.setAmount(totalTax.getAmount().add(tax.getAmount()));

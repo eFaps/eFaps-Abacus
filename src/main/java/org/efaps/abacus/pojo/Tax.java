@@ -31,7 +31,9 @@ public class Tax
     private BigDecimal percentage;
     private BigDecimal base;
     private BigDecimal amount;
+    private boolean freeOfCharge;
 
+    @Override
     public BigDecimal getBase()
     {
         return base;
@@ -44,6 +46,7 @@ public class Tax
         return this;
     }
 
+    @Override
     public BigDecimal getAmount()
     {
         return amount;
@@ -90,6 +93,18 @@ public class Tax
     public TaxType getType()
     {
         return type;
+    }
+
+    public Tax setFreeOfCharge(boolean freeOfCharge)
+    {
+        this.freeOfCharge = freeOfCharge;
+        return this;
+    }
+
+    @Override
+    public boolean isFreeOfCharge()
+    {
+        return freeOfCharge;
     }
 
     @Override
