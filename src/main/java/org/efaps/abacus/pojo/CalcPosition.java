@@ -16,8 +16,10 @@
 package org.efaps.abacus.pojo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.efaps.abacus.api.ICalcPosition;
@@ -134,6 +136,15 @@ public class CalcPosition
     public CalcPosition setTaxes(List<ITax> taxes)
     {
         this.taxes = taxes;
+        return this;
+    }
+
+    public CalcPosition addTax(final Tax tax)
+    {
+        if (CollectionUtils.isEmpty(getTaxes())) {
+            setTaxes(new ArrayList<>());
+        }
+        getTaxes().add(tax);
         return this;
     }
 
