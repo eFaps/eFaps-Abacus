@@ -54,6 +54,9 @@ public class CalcDocument
         if (this.positions == null) {
             positions = new ArrayList<>();
         }
+        if (position.getIndex() == 0) {
+            position.setIndex(positions.size() + 1);
+        }
         positions.add(position);
         return this;
     }

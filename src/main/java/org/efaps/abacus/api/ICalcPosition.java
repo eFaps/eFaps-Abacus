@@ -23,6 +23,8 @@ public interface ICalcPosition
 
     int getIndex();
 
+    ICalcPosition setIndex(int index);
+
     String getProductOid();
 
     BigDecimal getQuantity();
