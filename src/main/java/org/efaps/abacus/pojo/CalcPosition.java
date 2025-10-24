@@ -31,6 +31,7 @@ public class CalcPosition
 
     private int index;
     private String productOid;
+    private String standInOid;
     private BigDecimal quantity;
     private BigDecimal netUnitPrice;
     private BigDecimal netPrice;
@@ -71,6 +72,7 @@ public class CalcPosition
         return index;
     }
 
+    @Override
     public CalcPosition setIndex(final int index)
     {
         this.index = index;
@@ -86,6 +88,17 @@ public class CalcPosition
     public CalcPosition setProductOid(String productOid)
     {
         this.productOid = productOid;
+        return this;
+    }
+
+    public String getStandInOid()
+    {
+        return standInOid;
+    }
+
+    public CalcPosition setStandInOid(String standInOid)
+    {
+        this.standInOid = standInOid;
         return this;
     }
 
