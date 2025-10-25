@@ -27,6 +27,8 @@ public interface ICalcPosition
 
     String getProductOid();
 
+    String getStandInOid();
+
     BigDecimal getQuantity();
 
     BigDecimal getNetUnitPrice();
